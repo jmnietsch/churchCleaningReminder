@@ -18,8 +18,7 @@ public class ReminderMessage extends MimeMessage {
         try {
             setFrom(new InternetAddress(PUTZMAIL));
 
-            setRecipients(
-                    Message.RecipientType.TO, person.getMailadressString());
+            setRecipients(Message.RecipientType.TO, person.getMailadressString());
 
             setSubject("Dear " + person.getFirstname()
                     + ": Please Clean the Church on " + Schedule.simpleDateFormat.format(date)

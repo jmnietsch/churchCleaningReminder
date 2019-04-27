@@ -2,6 +2,7 @@ package church.clean;
 
 import org.jetbrains.annotations.NotNull;
 
+import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
@@ -79,14 +80,22 @@ public class Person implements Comparable<Person>{
     }
 
     public void sendMail(MimeMessage message) {
-        if(message == null) return;
+        if(message == null){
+            System.err.println("Skipped sending empty message to " + getName());
+            return;
+        }
+
+        if(!hasMailAdress()){
+            System.err.println("You cannot send an Email to " + getName() + ". There is no Mail-address available.");
+            return;
+        }
 
         try {
             Transport.send(message);
 
-            System.out.println("ReminderMessage #" + BUILD_NUMBER + " send to " + this.getName() + "!");
+            System.out.println("Message #" + BUILD_NUMBER + " send to " + this.getName() + "!");
         } catch (MessagingException e) {
-            System.err.println("ReminderMessage was not send. Please check your firewall.");
+            System.err.println("Message was not send. Please check your firewall.");
             System.err.println(e.getMessage());
         }
 
