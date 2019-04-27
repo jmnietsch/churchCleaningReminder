@@ -11,12 +11,14 @@ import java.util.*;
 public class Schedule {
 
     private Map<Date, Group> schedule = new HashMap<>();
+    private static String pattern = "dd.MM.yyyy";
+    private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+
 
     public Schedule(String file){
         System.out.println("We generate the List of cleaners from the File " + file + "\n");
 
-        String pattern = "dd.MM.yyyy";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
         BufferedReader reader;
         int linecounter = 0;
@@ -42,9 +44,7 @@ public class Schedule {
                     continue;
                 }
 
-                System.out.println(cleaner.getName() + " is cleaning on: " + simpleDateFormat.format(appointment));
-                addPerson(appointment, cleaner);
-
+                addCleanerToSchedule(appointment, cleaner);
             }
             reader.close();
         } catch (FileNotFoundException fnf){
@@ -59,17 +59,17 @@ public class Schedule {
         }
     }
 
-    private void addPerson(Date date, Person person){
+    private void addCleanerToSchedule(Date scheduledDate, Person responsiblePerson){
 
-        if(!schedule.keySet().contains(date)){
-            schedule.put(date, new Group());
+        if(!schedule.keySet().contains(scheduledDate)){
+            schedule.put(scheduledDate, new Group());
         }
 
-        Group group = schedule.get(date);
-        group.add(person);
+        Group group = schedule.get(scheduledDate);
+        group.add(responsiblePerson);
     }
 
-    Group getGroup(Date date){
+    Group getGroupScheduledAt(Date date){
         Group group = schedule.get(date);
 
         if (group == null){
@@ -101,7 +101,23 @@ public class Schedule {
 
         if(closest != null)
             return schedule.get(closest);
-        else
+        else{
+            System.err.println("No group is scheduled in the Future");
             return new Group();
+        }
+    }
+
+    void printSchedule(){
+        Set<Date> dates = schedule.keySet();
+
+        List<Date> sortedDates = new ArrayList<>(dates);
+        Collections.sort(sortedDates);
+
+        for (Date date : sortedDates) {
+            System.out.println(simpleDateFormat.format(date) + ":");
+            getGroupScheduledAt(date).print();
+            System.out.println();
+        }
+
     }
 }

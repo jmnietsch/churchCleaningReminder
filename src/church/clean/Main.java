@@ -8,7 +8,7 @@ import javax.mail.internet.MimeMultipart;
 import java.util.*;
 
 public class Main {
-    public static final String BUILD_NUMBER = "35";
+    public static final String BUILD_NUMBER = "40";
 
     private static final String SMTPHOST = "securesmtp.t-online.de";
     private static final String PUTZMAIL = "putzdienst-mail@noreply.de";
@@ -29,11 +29,12 @@ public class Main {
 
         Schedule schedule = new Schedule(SCHEDULE);
 
+        schedule.printSchedule();
+
         Group nextScheduledGroup = schedule.getNextGroup();
-        nextScheduledGroup.print();
+        nextScheduledGroup.prettyPrint();
 
 //        Session session = createSession();
-
 //        sendEmails(session);
     }
 

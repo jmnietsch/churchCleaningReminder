@@ -1,9 +1,11 @@
 package church.clean;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
-public class Person {
+public class Person implements Comparable<Person>{
     private String mailadress;
     private String firstname;
     private String surname;
@@ -49,7 +51,7 @@ public class Person {
 
     @Override
     public String toString() {
-        return getName() + "(" + getMailadressString() + ")";
+        return getName() + " (" + getMailadressString() + ")";
     }
 
     public boolean hasName(String firstname, String surname) {
@@ -58,5 +60,16 @@ public class Person {
 
     public boolean hasName(String name) {
         return this.getName().equals(name);
+    }
+
+    @Override
+    public int compareTo(@NotNull Person o) {
+        int surnameCompare = this.getSurname().compareTo(o.getSurname());
+
+        if (surnameCompare != 0)
+            return surnameCompare;
+        else
+            return this.getFirstname().compareTo(o.getFirstname());
+
     }
 }

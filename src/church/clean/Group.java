@@ -1,6 +1,6 @@
 package church.clean;
 
-import java.util.HashSet;
+import java.util.*;
 
 public class Group extends HashSet<Person> {
     public static int GROUPSIZE = 5;
@@ -13,12 +13,19 @@ public class Group extends HashSet<Person> {
         super(size);
     }
 
+    public void prettyPrint() {
+        System.out.println("This Group contains:");
+        this.print();
+        System.out.println("\n");
+    }
+
     public void print() {
-        System.out.println("This Group contains:\n");
-        for (Person person : this) {
+        List<Person> sortedPersons = new ArrayList<>(this);
+        Collections.sort(sortedPersons);
+
+        for (Person person : sortedPersons) {
             System.out.println(person.toString());
         }
-        System.out.println("\n");
     }
 
     @Override
