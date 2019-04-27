@@ -5,17 +5,10 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
-
 public class Main {
-    public static final String BUILD_NUMBER = "33";
+    public static final String BUILD_NUMBER = "35";
 
     private static final String SMTPHOST = "securesmtp.t-online.de";
     private static final String PUTZMAIL = "putzdienst-mail@noreply.de";
@@ -23,8 +16,8 @@ public class Main {
     private static final String TO = System.getenv("username");
     private static final String PASS = System.getenv("password");
 
-    private static final String FILE = "putzliste.txt";
-    public static final String PERSONS = "persons.txt";
+    private static final String SCHEDULE = "random_clening_schedule.CSV";
+    public static final String PERSONS = "random_persons.txt";
 
     /**
      * "This tool is supposed to send Emails to every person, that is part of the Cleaning-Team this week.
@@ -34,7 +27,7 @@ public class Main {
 
         System.out.println("Du bist dran mit spülen: #" + BUILD_NUMBER);
 
-        Schedule schedule = generateCleaningList();
+        Schedule schedule = new Schedule(SCHEDULE);
 
         Group nextScheduledGroup = schedule.getNextGroup();
         nextScheduledGroup.print();
@@ -42,57 +35,6 @@ public class Main {
 //        Session session = createSession();
 
 //        sendEmails(session);
-    }
-    
-    private static Schedule generateCleaningList() {
-        System.out.println("We generate the List of cleaners from the File " + FILE + "\n");
-
-        String pattern = "dd.MM.yyyy";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-
-        Schedule schedule = new Schedule();
-
-        BufferedReader reader;
-        int linecounter = 0;
-
-        try {
-            reader = new BufferedReader(new FileReader(FILE));
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                linecounter++;
-
-                String[] segments = line.split(",");
-
-                if(segments.length < 2) {
-                    System.out.println("Line " + linecounter + " has to few segments");
-                    continue;
-                }
-
-                Date appointment = simpleDateFormat.parse(segments[0]);
-                Person cleaner = PersonDatabase.getPersonByName(segments[1]);
-
-                if(cleaner == null){
-                    continue;
-                }
-
-                System.out.println(cleaner.getName() + " is cleaning on: " + simpleDateFormat.format(appointment));
-                schedule.addPerson(appointment, cleaner);
-
-            }
-            reader.close();
-        } catch (FileNotFoundException fnf){
-            System.out.println("The File " + FILE + " was not found. Please check if it exists.");
-        } catch (IOException e) {
-            System.out.println("Something went wrong, while reading the File " + FILE);
-
-            e.printStackTrace();
-        } catch (ParseException e) {
-            System.out.println("Invalid Date in line: " + linecounter);
-            e.printStackTrace();
-        }
-
-        return schedule;
     }
 
     private static void sendEmails(Session session) {

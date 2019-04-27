@@ -1,13 +1,65 @@
 package church.clean;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Schedule {
 
-    Map<Date, Group> schedule = new HashMap<>();
+    private Map<Date, Group> schedule = new HashMap<>();
 
-    void addPerson(Date date, Person person){
+    public Schedule(String file){
+        System.out.println("We generate the List of cleaners from the File " + file + "\n");
+
+        String pattern = "dd.MM.yyyy";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+        BufferedReader reader;
+        int linecounter = 0;
+
+        try {
+            reader = new BufferedReader(new FileReader(file));
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                linecounter++;
+
+                String[] segments = line.split(";");
+
+                if(segments.length < 2) {
+                    System.out.println("Line " + linecounter + " has to few segments");
+                    continue;
+                }
+
+                Date appointment = simpleDateFormat.parse(segments[0]);
+                Person cleaner = PersonDatabase.getPersonByName(segments[1]);
+
+                if(cleaner == null){
+                    continue;
+                }
+
+                System.out.println(cleaner.getName() + " is cleaning on: " + simpleDateFormat.format(appointment));
+                addPerson(appointment, cleaner);
+
+            }
+            reader.close();
+        } catch (FileNotFoundException fnf){
+            System.out.println("The File " + file + " was not found. Please check if it exists.");
+        } catch (IOException e) {
+            System.out.println("Something went wrong, while reading the File " + file);
+
+            e.printStackTrace();
+        } catch (ParseException e) {
+            System.out.println("Invalid Date in line: " + linecounter);
+            e.printStackTrace();
+        }
+    }
+
+    private void addPerson(Date date, Person person){
 
         if(!schedule.keySet().contains(date)){
             schedule.put(date, new Group());
@@ -45,8 +97,6 @@ public class Schedule {
                 closest = scheduledDate;
                 dueNext = dueIn;
             }
-
-
         }
 
         if(closest != null)
