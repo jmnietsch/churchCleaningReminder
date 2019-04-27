@@ -30,17 +30,17 @@ public class ReminderMessage extends MimeMessage {
                     .append(person.getFirstname())
                     .append(",\n")
 
-                    .append("This ReminderMessage is supposed to remind you to clean the Church. #" +BUILD_NUMBER + "\n\n")
+                    .append("This Message is supposed to remind you to clean the Church. #" +BUILD_NUMBER + "\n\n")
 
                     .append("You are part of the Team, that will clean our Church on ")
                     .append(Schedule.simpleDateFormat.format(date))
-                    .append("\n")
+                    .append("\n\n")
 
-                    .append("Your Team consists of: ")
+                    .append("Your Team consists of:\n")
                     .append(team.toPrettyString());
 
             MimeBodyPart mimeBodyPart = new MimeBodyPart();
-            mimeBodyPart.setContent(msg.toString(),  "text/html;charset=utf-8");
+            mimeBodyPart.setContent(msg.toString(),  "text/plain;charset=utf-8");
 
             Multipart multipart = new MimeMultipart();
 
