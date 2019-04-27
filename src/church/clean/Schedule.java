@@ -16,7 +16,7 @@ public class Schedule {
 
 
 
-    public Schedule(String file){
+    public Schedule(String file, PersonDatabase personDatabase){
         System.out.println("We generate the List of cleaners from the File " + file + "\n");
 
 
@@ -38,7 +38,7 @@ public class Schedule {
                 }
 
                 Date appointment = simpleDateFormat.parse(segments[0]);
-                Person cleaner = PersonDatabase.getPersonByName(segments[1]);
+                Person cleaner = personDatabase.getPersonByName(segments[1]);
 
                 if(cleaner == null){
                     continue;

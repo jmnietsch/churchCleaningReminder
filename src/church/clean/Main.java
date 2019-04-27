@@ -8,7 +8,7 @@ import javax.mail.internet.MimeMultipart;
 import java.util.*;
 
 public class Main {
-    public static final String BUILD_NUMBER = "40";
+    public static final String BUILD_NUMBER = "41";
 
     private static final String SMTPHOST = "securesmtp.t-online.de";
     private static final String PUTZMAIL = "putzdienst-mail@noreply.de";
@@ -27,7 +27,7 @@ public class Main {
 
         System.out.println("Du bist dran mit spülen: #" + BUILD_NUMBER);
 
-        Schedule schedule = new Schedule(SCHEDULE);
+        Schedule schedule = new Schedule(SCHEDULE, new PersonDatabase(PERSONS));
 
         schedule.printSchedule();
 

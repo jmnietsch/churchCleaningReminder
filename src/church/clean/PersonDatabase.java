@@ -13,13 +13,12 @@ class PersonDatabase {
 
     private HashSet<Person> allPersons;
 
-    private static PersonDatabase instance = new PersonDatabase();
-    private PersonDatabase(){
+    public PersonDatabase(String file){
         allPersons = new HashSet<>();
 
         BufferedReader reader;
         try {
-            reader = new BufferedReader(new FileReader(Main.PERSONS));
+            reader = new BufferedReader(new FileReader(file));
 
             //skip the first line
             reader.readLine();
@@ -45,19 +44,19 @@ class PersonDatabase {
             }
             reader.close();
         } catch (FileNotFoundException fnf){
-            System.out.println("The File " + Main.PERSONS + " was not found. Please check if it exists.");
+            System.out.println("The File " + file + " was not found. Please check if it exists.");
         } catch (IOException e) {
-            System.out.println("Something went wrong, while reading the File " + Main.PERSONS);
+            System.out.println("Something went wrong, while reading the File " + file);
         }
 
     }
 
-    static HashSet<Person> getAllPersons() {
-        return instance.allPersons;
+    HashSet<Person> getAllPersons() {
+        return allPersons;
     }
 
     @Nullable
-    static Person getPersonByName(String name) {
+    Person getPersonByName(String name) {
         for (Person person : getAllPersons()) {
             if(person.hasName(name))
                 return person;
@@ -68,7 +67,7 @@ class PersonDatabase {
 
     }
 
-    static Person getPersonByName(String firstname, String surname) {
+    Person getPersonByName(String firstname, String surname) {
         return getPersonByName(firstname + " " + surname);
     }
 
