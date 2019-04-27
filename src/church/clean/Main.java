@@ -4,7 +4,7 @@ import javax.mail.internet.*;
 import java.util.*;
 
 public class Main {
-    public static final String BUILD_NUMBER = "41";
+    public static final String BUILD_NUMBER = "45";
 
     public static final String SMTPHOST = "securesmtp.t-online.de";
     public static final String PUTZMAIL = "putzdienst-mail@noreply.de";
@@ -24,7 +24,7 @@ public class Main {
 
         Schedule schedule = new Schedule(SCHEDULE, new PersonDatabase(PERSONS));
 
-        schedule.printSchedule();
+//        schedule.printSchedule();
 
         Group nextScheduledGroup = schedule.getNextGroup();
         Date nextScheduledDate = schedule.getNextDate();
@@ -34,13 +34,14 @@ public class Main {
             System.exit(-1);
         }
 
-        nextScheduledGroup.prettyPrint();
+//        nextScheduledGroup.prettyPrint();
 
         ReminderSession session = new ReminderSession();
 
         for (Person person : nextScheduledGroup){
             MimeMessage message = new ReminderMessage(session.getSession(), person, nextScheduledDate, nextScheduledGroup);
             person.sendMail(message);
+            break;
         }
     }
 
