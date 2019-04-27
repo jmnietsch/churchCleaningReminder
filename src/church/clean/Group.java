@@ -28,7 +28,7 @@ public class Group extends HashSet<Person> {
         StringBuilder s = new StringBuilder();
 
         s.append("[");
-        for (Person person : this) {
+        for (Person person : toSortedList()) {
             s.append(person.getName());
             s.append(",");
         }
@@ -37,15 +37,19 @@ public class Group extends HashSet<Person> {
         return s.toString();
     }
 
-    public String toPrettyString(){
+    public List<Person> toSortedList(){
         List<Person> sortedPersons = new ArrayList<>(this);
         Collections.sort(sortedPersons);
 
+        return sortedPersons;
+    }
+
+    public String toPrettyString(){
         StringBuilder string = new StringBuilder();
 
-        for (Person person : sortedPersons) {
+        for (Person person : toSortedList()) {
             string.append(person.toString())
-                    .append("\n");
+                    .append("\r\n");
         }
 
         return string.toString();
