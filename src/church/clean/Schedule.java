@@ -1,5 +1,7 @@
 package church.clean;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -11,8 +13,8 @@ import java.util.*;
 public class Schedule {
 
     private Map<Date, Group> schedule = new HashMap<>();
-    private static String pattern = "dd.MM.yyyy";
-    private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+    public static String pattern = "dd.MM.yyyy";
+    public static SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
 
 
@@ -81,11 +83,16 @@ public class Schedule {
     }
 
     Group getNextGroup(){
-        Group group = null;
+        Date nextDate = getNextDate();
+        if(nextDate == null)
+            return new Group();
+        else{
+            assert (schedule.get(nextDate) != null);
+            return schedule.get(nextDate);
+        }
+    }
 
-        String pattern = "dd.MM.yyyy";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-
+    Date getNextDate() {
         Date today = new Date();
 
         Date closest = null;
@@ -100,10 +107,10 @@ public class Schedule {
         }
 
         if(closest != null)
-            return schedule.get(closest);
+            return closest;
         else{
             System.err.println("No group is scheduled in the Future");
-            return new Group();
+            return null;
         }
     }
 
@@ -120,4 +127,5 @@ public class Schedule {
         }
 
     }
+
 }

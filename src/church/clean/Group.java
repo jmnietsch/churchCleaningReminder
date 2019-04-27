@@ -20,12 +20,7 @@ public class Group extends HashSet<Person> {
     }
 
     public void print() {
-        List<Person> sortedPersons = new ArrayList<>(this);
-        Collections.sort(sortedPersons);
-
-        for (Person person : sortedPersons) {
-            System.out.println(person.toString());
-        }
+        System.out.println(toPrettyString());
     }
 
     @Override
@@ -40,5 +35,19 @@ public class Group extends HashSet<Person> {
         s.append("]");
 
         return s.toString();
+    }
+
+    public String toPrettyString(){
+        List<Person> sortedPersons = new ArrayList<>(this);
+        Collections.sort(sortedPersons);
+
+        StringBuilder string = new StringBuilder();
+
+        for (Person person : sortedPersons) {
+            string.append(person.toString())
+                    .append("\n");
+        }
+
+        return string.toString();
     }
 }

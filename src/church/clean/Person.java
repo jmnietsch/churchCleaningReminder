@@ -2,8 +2,13 @@ package church.clean;
 
 import org.jetbrains.annotations.NotNull;
 
+import javax.mail.MessagingException;
+import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
+import static church.clean.Main.BUILD_NUMBER;
 
 public class Person implements Comparable<Person>{
     private String mailadress;
@@ -70,6 +75,20 @@ public class Person implements Comparable<Person>{
             return surnameCompare;
         else
             return this.getFirstname().compareTo(o.getFirstname());
+
+    }
+
+    public void sendMail(MimeMessage message) {
+        if(message == null) return;
+
+        try {
+            Transport.send(message);
+
+            System.out.println("ReminderMessage #" + BUILD_NUMBER + " send to " + this.getName() + "!");
+        } catch (MessagingException e) {
+            System.err.println("ReminderMessage was not send. Please check your firewall.");
+            System.err.println(e.getMessage());
+        }
 
     }
 }
