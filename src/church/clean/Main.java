@@ -1,10 +1,9 @@
 package church.clean;
 
-import javax.mail.internet.*;
 import java.util.*;
 
 public class Main {
-    public static final String BUILD_NUMBER = "45";
+    public static final String BUILD_NUMBER = "50";
 
     public static final String SMTPHOST = "securesmtp.t-online.de";
     public static final String PUTZMAIL = "putzdienst-mail@noreply.de";
@@ -24,8 +23,6 @@ public class Main {
 
         Schedule schedule = new Schedule(SCHEDULE, new PersonDatabase(PERSONS));
 
-//        schedule.printSchedule();
-
         Group nextScheduledGroup = schedule.getNextGroup();
         Date nextScheduledDate = schedule.getNextDate();
 
@@ -34,18 +31,11 @@ public class Main {
             System.exit(-1);
         }
 
-//        nextScheduledGroup.prettyPrint();
-
         ReminderSession session = new ReminderSession();
+        ReminderMessage message = new ReminderMessage(session.getSession(), nextScheduledDate, nextScheduledGroup);
 
         for (Person person : nextScheduledGroup){
-            MimeMessage message = new ReminderMessage(session.getSession(), person, nextScheduledDate, nextScheduledGroup);
-            person.sendMail(message);
-            break;
+            person.sendMail(message.personaliseMessageFor(person));
         }
     }
-
-
-
-
 }
