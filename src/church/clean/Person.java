@@ -57,7 +57,9 @@ public class Person implements Comparable<Person>{
 
     @Override
     public String toString() {
-        return getName() + " (" + getMailadressString() + ")";
+        String mailAddressString = " (" + getMailadressString() + ")";
+        return getName()
+                + (hasMailAdress() ? mailAddressString : "");
     }
 
     public boolean hasName(String firstname, String surname) {

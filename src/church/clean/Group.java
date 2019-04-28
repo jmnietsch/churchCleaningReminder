@@ -47,10 +47,9 @@ public class Group extends HashSet<Person> {
     public String toPrettyString(){
         StringBuilder string = new StringBuilder();
 
-        for (Person person : toSortedList()) {
+         for (Person person : toSortedList())
             string.append(person.toString())
-                    .append("\r\n");
-        }
+                    .append("\n");
 
         return string.toString();
     }
